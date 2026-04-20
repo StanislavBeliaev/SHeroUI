@@ -2,7 +2,7 @@ import {Card} from "@heroui/react";
 import type {ICity} from "@/services/cityService/types"
 import Link from "next/link";
 
-export function CardBase({footer, description, title }: {
+export function CardBase({footer, description, title}: {
     footer?: string;
     description?: ICity[];
     title?: string,
@@ -15,10 +15,9 @@ export function CardBase({footer, description, title }: {
                 <Card.Description>
                     {description?.map((v) => {
                         return (
-                            <Link key={v.slug} href={v.slug}>
+                            <Link key={v.slug} href={v.slug} prefetch={false}>
                                 <span key={v.id} className="flex cursor-pointer">{v.name}</span>
                             </Link>
-
                         );
                     })}
                 </Card.Description>

@@ -4,7 +4,9 @@ import type {ICityServiceGetCitiesParams, ICityServiceGetCitiesResponse} from ".
 export const cityService = {
     getCities: async (params: ICityServiceGetCitiesParams) => {
         const response = await api.get<ICityServiceGetCitiesResponse[]>('/country/withCities', {
-            params
+            params,
+            revalidate: 86400 * 86400,
+            tags: ['get-cities'],
         })
         return response.data;
     }

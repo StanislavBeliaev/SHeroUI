@@ -6,12 +6,14 @@
     --background: #f4f4f4;
     --black: #232323;
     --secondary: #8B8B8B;
+    --salonprogreen: #16a897;
 }
 @theme inline {
     --color-background: var(--background);
     --color-text-primary: var(--black);
     --color-text-secondary: var(--secondary);
     --color-primary: var(--salonpro);
+    --color-green: var(--salonprogreen);
     --font-sans: var(--font-open-sans);
 }
 
