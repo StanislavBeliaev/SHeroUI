@@ -1,40 +1,22 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { getCitySlugFromApi } from "./getCitySlugFromApi";
+import { getCitySlugFromApi } from "../getCitySlugFromApi";
 
-export async function handleCitySlug(req: NextRequest, baseUrl?: string) {
+export async function citySlugHandler(req: NextRequest): Promise<NextResponse | null> {
+    const BASE_URL = process.env.BASE_URL;
     const pathname = req.nextUrl.pathname;
-    // Пример: /minsk/salon... -> ["", "minsk", "salon"...] -> minsk
-    const pathParts = pathname.split("/");
-    const cityNameFromUrl = pathParts[1];
+    const cityFromUrl = pathname.split("/")[1];
+    if (!cityFromUrl) return null;
 
-    if (!cityNameFromUrl) {
-        return NextResponse.next();
+    const currentCity = req.cookies.get("City_slug")?.value;
+    if (currentCity === cityFromUrl) return null;
+
+    const valid = await getCitySlugFromApi(cityFromUrl, BASE_URL);
+    if (!valid || valid !== cityFromUrl) {
+        return NextResponse.redirect("/");
     }
 
-    const cityCookie = req.cookies.get("City_slug");
-    const currentCitySlug = cityCookie?.value;
-
-    if (currentCitySlug === cityNameFromUrl) {
-        return NextResponse.next();
-    }
-
-    const validCitySlug = await getCitySlugFromApi(cityNameFromUrl, baseUrl);
-
-    if (!validCitySlug || validCitySlug !== cityNameFromUrl) {
-        return NextResponse.redirect("/")
-    }
-
-    // Создаем ответ
-    const response = NextResponse.next();
-
-    // Устанавливаем новую куку
-    response.cookies.set("City_slug", validCitySlug, {
-        path: "/",
-        maxAge: 60 * 60 * 24 * 30,
-        httpOnly: false,
-        sameSite: "lax",
-    });
-
-    return response;
+    const res = NextResponse.next();
+    res.cookies.set("City_slug", valid, { path: "/", maxAge: 60*60*24*30 });
+    return res;
 }
