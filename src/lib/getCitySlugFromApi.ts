@@ -1,4 +1,9 @@
-export async function getCitySlugFromApi(cityName: string, BASE_URL:string | undefined): Promise<string | null> {
+export type CityFromApi = {
+    slug: string | null;
+    id: string | null;
+};
+
+export async function getCitySlugFromApi(cityName: string, BASE_URL: string | undefined): Promise<CityFromApi | null> {
     try {
         if (!BASE_URL) {
             console.error("BASE_URL is not defined");
@@ -17,7 +22,9 @@ export async function getCitySlugFromApi(cityName: string, BASE_URL:string | und
         }
 
         const data = await response.json();
-        return data?.slug || null;
+        
+        return {slug: data?.slug ?? null, id: data?.id ?? null};
+
     } catch (err) {
         console.error("Ошибка при получении города:", err);
         return null;

@@ -57,28 +57,45 @@ export class ApiClient {
         };
     }
 
+    private readCookieValue(
+        cookieStore: { get: (name: string) => { value: string } | undefined; getAll: () => Array<{ name: string; value: string }> },
+        cookieName: string,
+    ): string | undefined {
+        const direct = cookieStore.get(cookieName)?.value;
+        if (direct !== undefined) return direct;
+        const normalized = cookieName.toLowerCase();
+        const fallback = cookieStore.getAll().find((item) => item.name.toLowerCase() === normalized);
+        return fallback?.value;
+    }
+
     private async injectServerHeaders(headers: Headers): Promise<void> {
         if (typeof window !== 'undefined') return;
 
         try {
             const { cookies } = await import('next/headers');
             const cookieStore = await cookies();
+            const allCookies = cookieStore.getAll();
 
-            // 1. Токен авторизации (Bearer)
+            if (!headers.has('Cookie') && allCookies.length > 0) {
+                const cookieHeader = allCookies
+                    .map(({ name, value }) => `${name}=${encodeURIComponent(value)}`)
+                    .join('; ');
+                headers.set('Cookie', cookieHeader);
+            }
+
             if (!headers.has('Authorization')) {
                 const token = this.config.getToken
                     ? await Promise.resolve(this.config.getToken())
-                    : cookieStore.get(this.config.tokenCookieName)?.value;
+                    : this.readCookieValue(cookieStore, this.config.tokenCookieName);
 
                 if (token) {
                     headers.set('Authorization', `Bearer ${token}`);
                 }
             }
 
-            // 2. Кастомные куки → заголовки
             if (this.config.cookieHeaders) {
                 for (const [cookieName, headerName] of Object.entries(this.config.cookieHeaders)) {
-                    const value = cookieStore.get(cookieName)?.value;
+                    const value = this.readCookieValue(cookieStore, cookieName);
                     if (value !== undefined) {
                         headers.set(headerName, value);
                     }
@@ -122,6 +139,9 @@ export class ApiClient {
 
         // Инъекция серверных куков в заголовки
         await this.injectServerHeaders(headers);
+        if (this.config.enableLogging) {
+            console.log('[ApiClient] Финальные заголовки запроса:', Object.fromEntries(headers.entries()));
+        }
 
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), timeout);
@@ -137,7 +157,7 @@ export class ApiClient {
                     ? JSON.stringify(options.body)
                     : undefined,
         };
-
+        console.log('fetchConfig', fetchConfig)
         if (typeof window === 'undefined' && (revalidate !== undefined || tags !== undefined)) {
             fetchConfig.next = { revalidate, tags };
         }

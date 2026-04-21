@@ -6,8 +6,8 @@ export const api = new ApiClient({
     tokenCookieName: process.env.AUTH_COOKIE_NAME || 'access_token',
 
     cookieHeaders: {
-        [process.env.COUNTRY_COOKIE_NAME || 'country_id']: 'X-Country-Id',
-        [process.env.CITY_COOKIE_NAME || 'city_id']: 'X-City-Id',
+        [process.env.COUNTRY_COOKIE_NAME || 'Country_id']: 'X-Country-Id',
+        [process.env.CITY_COOKIE_NAME || 'City_id']: 'X-City-Id',
     },
 
     defaultTimeout: 100_000,

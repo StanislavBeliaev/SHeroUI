@@ -1,7 +1,7 @@
-import {SalonCard} from "@/entities/salon-card/ui";
 import {categoryService} from "@/services/categoryService/categoryService";
 import {salonService} from "@/services/salonService/salonService";
 import type {SalonsLoaded} from "@/services/salonService/types";
+import {BestsSalonsCarousel} from "@/widgets/BestsSalons/ui/BestsSalonsCarousel";
 
 export async function BestsSalonsContent() {
     const popularCategories = await categoryService.getPopularCategories();
@@ -14,7 +14,6 @@ export async function BestsSalonsContent() {
     } else {
         return null
     }
-    console.log(popularCategories)
     return (
         <div className="flex flex-col gap-4">
             <div className="flex">
@@ -24,16 +23,8 @@ export async function BestsSalonsContent() {
                     </div>
                 ))}
             </div>
-            <div className="flex gap-3.5 overflow-x-auto p-1">
-                <div className="flex gap-3">
-                    {
-                        salons?.content?.map((salon, idx) => (
-                            <div key={salon.id} className="flex">
-                                <SalonCard{...salon}/>
-                            </div>
-                        ))
-                    }
-                </div>
+            <div className="w-full min-w-0">
+                <BestsSalonsCarousel salons={salons.content}/>
             </div>
         </div>
     )

@@ -12,11 +12,14 @@ export async function citySlugHandler(req: NextRequest): Promise<NextResponse | 
     if (currentCity === cityFromUrl) return null;
 
     const valid = await getCitySlugFromApi(cityFromUrl, BASE_URL);
-    if (!valid || valid !== cityFromUrl) {
+    if (!valid?.slug || valid.slug !== cityFromUrl) {
         return NextResponse.redirect("/");
     }
 
     const res = NextResponse.next();
-    res.cookies.set("City_slug", valid, { path: "/", maxAge: 60*60*24*30 });
+    res.cookies.set("City_slug", valid.slug, { path: "/", maxAge: 60 * 60 * 24 * 30 });
+    if (valid.id) {
+        res.cookies.set("City_id", valid.id, { path: "/", maxAge: 60 * 60 * 24 * 30 });
+    }
     return res;
 }
