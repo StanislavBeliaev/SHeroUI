@@ -143,7 +143,6 @@ export class ApiClient {
         }
 
         try {
-            console.log(fullUrl, fetchConfig);
             const response = await fetch(fullUrl, fetchConfig);
 
             if (this.config.enableLogging) {
