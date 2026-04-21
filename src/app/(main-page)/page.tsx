@@ -6,7 +6,6 @@ export default async function Home() {
         active: true,
         sizeType: "STANDARD"
     })
-    console.log(cities)
     return (
         <div className="flex justify-center items-start">
             {cities.map((country) => (

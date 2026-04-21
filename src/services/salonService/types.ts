@@ -1,5 +1,60 @@
 export type SizeType = 'SMALLEST' | 'SMALLER' | 'SMALL' | 'MEDIUM' | 'LARGE' | 'LARGER' | 'LARGEST';
 
+export interface Currency {
+  id: number;
+  code: string;
+  sign: string;
+  exchangeRate: number;
+}
+
+export interface OnlineReservationStatus {
+  available: boolean;
+  isMaster: boolean;
+  availableMasterIds: number[];
+}
+
+export interface SalonItem {
+  id: number;
+  sizeType: SizeType;
+  singleMasterId: number | null;
+  currency: Currency;
+  distance: number | null;
+  single: boolean;
+  name: string;
+  surname: string | null;
+  starCount: number;
+  starAverage: number;
+  status: string;
+  description: string;
+  lat: number;
+  lng: number;
+  smallAvatar: string;
+  bigAvatar: string;
+  contactAddress: string;
+  dynamic_link: string | null;
+  demo: boolean;
+  deleted: boolean;
+  contractId: number | null;
+  contractUploadLock: boolean;
+  contactPhone: string;
+  hideSuccessModeration: boolean;
+  hidden: boolean;
+  isWorkTimeDefault: boolean | null;
+  onlineReservation: boolean;
+  slug: string;
+  distanceToMetro: number | null;
+  updatedAt: string | null;
+  onlineReservationStatus: OnlineReservationStatus;
+}
+
+export interface SalonsLoaded {
+  page: number;
+  pageSize: number;
+  totalPages: number;
+  totalElements: number;
+  content: SalonItem[];
+}
+
 export type SortBy = 'PRICE' | 'RATING' | 'REVIEWS' | 'DISTANCE' | 'NAME' | 'UPDATED';
 
 export type SalonType = 'SALON' | 'MASTER' | 'SELFEMPLOYED';
