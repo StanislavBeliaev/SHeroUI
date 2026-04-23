@@ -1,10 +1,9 @@
-import type {Props} from "@/services/globalTypes"
 import {BestsSalons} from "@/widgets/BestsSalons/ui";
 
-export default async function CityPage({params}: Props) {
+export default async function CityPage({params}: {params: {city: string}}) {
     const {city} = await params;
 
     return (
-        <BestsSalons/>
+        <BestsSalons city={city} />
     )
 }

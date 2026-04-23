@@ -1,10 +1,7 @@
 import {cityService} from "@/services/cityService/cityService"
 import {CardBase} from "@/shared/CardBase";
-import { cookies } from "next/headers";
 
 export default async function Home() {
-    const cookieStore = await cookies()
-    console.log('cookieStore', cookieStore)
     const cities = await cityService.getCities({
         active: true,
         sizeType: "STANDARD"
