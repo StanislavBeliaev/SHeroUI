@@ -1,0 +1,1 @@
+export { BestsSalonsFilters } from "./BestsSalonsFilters";

@@ -1,7 +1,7 @@
 export function SectionTitle ({title}: {title: string}) {
     return (
-        <div className="flex justify-between">
-            <h2 className="text-3xl text-green font-bold">
+        <div className="flex justify-between items-baseline">
+            <h2 className="text-3xl text-green font-semibold">
                 {title}
             </h2>
             <button type="button" className="text-primary text-sm font-semibold cursor-pointer hover:text-primary/80">

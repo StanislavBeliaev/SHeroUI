@@ -1,34 +1,37 @@
-import { categoryService } from "@/services/categoryService/categoryService";
-import { salonService } from "@/services/salonService/salonService";
-import type { SalonsLoaded } from "@/services/salonService/types";
+"use client";
 import { BestsSalonsCarousel } from "@/widgets/BestsSalons/ui/BestsSalonsCarousel";
 import { SalonCard } from "@/entities/salon-card/ui";
+import { BestsSalonsFilters } from "@/features/best-salons-filter/ui";
+import type { PopularCategory } from "@/services/categoryService/categoryService";
+import type { SalonsLoaded } from "@/services/salonService/types";
+import { useBestsSalonsFilter } from "@/features/best-salons-filter/ui/model/useBestsSalonsFilter";
 
-export async function BestsSalonsContent({ city }: { city: string }) {
-  const popularCategories = await categoryService.getPopularCategories();
-  let salons: SalonsLoaded;
-  if (popularCategories.length) {
-    const firstCategoryId = popularCategories[0].id;
-    salons = await salonService.getSalons({
-      categoryId: [firstCategoryId],
-    });
-  } else {
-    return null;
-  }
+export function BestsSalonsContent({
+  city,
+  popularCategories,
+  salons,
+  getBestsSalonsFromServer,
+}: {
+  city: string;
+  popularCategories: PopularCategory[];
+  salons: SalonsLoaded;
+  getBestsSalonsFromServer: (id: number) => Promise<SalonsLoaded>;
+}) {
+  const { currentCategory, handleCategoryClick } = useBestsSalonsFilter(salons, getBestsSalonsFromServer);
   return (
     <div className="flex flex-col gap-4">
       <div className="flex">
-        {popularCategories.map((category) => (
-          <div key={category.id} className="flex gap-2">
-            {category.name}
-          </div>
-        ))}
+        <BestsSalonsFilters
+          popularCategories={popularCategories}
+          handleCategoryClick={handleCategoryClick}
+          activeCategory={currentCategory.activeCategory}
+        />
       </div>
-        <BestsSalonsCarousel>
-          {salons.content.map((salon) => (
-            <SalonCard key={salon.id} city={city} {...salon} />
-          ))}
-        </BestsSalonsCarousel>
+      <BestsSalonsCarousel>
+        {currentCategory.content.map((salon) => (
+          <SalonCard key={salon.id} city={city} {...salon} />
+        ))}
+      </BestsSalonsCarousel>
     </div>
   );
 }

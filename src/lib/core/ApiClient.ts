@@ -139,9 +139,6 @@ export class ApiClient {
 
         // Инъекция серверных куков в заголовки
         await this.injectServerHeaders(headers);
-        if (this.config.enableLogging) {
-            console.log('[ApiClient] Финальные заголовки запроса:', Object.fromEntries(headers.entries()));
-        }
 
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), timeout);
@@ -157,7 +154,6 @@ export class ApiClient {
                     ? JSON.stringify(options.body)
                     : undefined,
         };
-        console.log('fetchConfig', fetchConfig)
         if (typeof window === 'undefined' && (revalidate !== undefined || tags !== undefined)) {
             fetchConfig.next = { revalidate, tags };
         }

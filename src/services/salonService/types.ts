@@ -48,6 +48,7 @@ export interface SalonItem {
 }
 
 export interface SalonsLoaded {
+  activeCategory: number;
   page: number;
   pageSize: number;
   totalPages: number;
