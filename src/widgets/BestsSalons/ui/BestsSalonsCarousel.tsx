@@ -38,7 +38,7 @@ export function BestsSalonsCarousel({ children }: BestsSalonsCarouselProps) {
       <Carousel>
         {Children.map(children, (child) =>
           isValidElement(child) ? (
-            <SwiperSlide className="p-1" key={child.key}>
+            <SwiperSlide className="pb-4" key={child.key}>
               {child}
             </SwiperSlide>
           ) : null

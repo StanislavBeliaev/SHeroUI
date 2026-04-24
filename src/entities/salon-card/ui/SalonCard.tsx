@@ -23,8 +23,8 @@ export function SalonCard({ name, slug, smallAvatar, contactAddress, city }: Sal
         </Card.Header>
         <Card.Footer className="px-2">
           <div className="min-h-14">
-            <div className="text-base font-semibold line-clamp-2">{name}</div>
-            <p className="line-clamp-2">{contactAddress}</p>
+            <div className="text-base font-semibold line-clamp-1">{name}</div>
+            <p className="line-clamp-1">{contactAddress}</p>
           </div>
         </Card.Footer>
       </Card>

@@ -4,7 +4,7 @@ import { SalonCard } from "@/entities/salon-card/ui";
 import { BestsSalonsFilters } from "@/features/best-salons-filter/ui";
 import type { PopularCategory } from "@/services/categoryService/categoryService";
 import type { SalonsLoaded } from "@/services/salonService/types";
-import { useBestsSalonsFilter } from "@/features/best-salons-filter/ui/model/useBestsSalonsFilter";
+import { useBestsSalonsFilter } from "@/features/best-salons-filter/model/useBestsSalonsFilter";
 
 export function BestsSalonsContent({
   city,

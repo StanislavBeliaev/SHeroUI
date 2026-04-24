@@ -15,8 +15,17 @@
     --color-primary: var(--salonpro);
     --color-green: var(--salonprogreen);
     --font-sans: var(--font-open-sans);
+    --text-title: clamp(1.125rem, 2vw, 1.75rem);
 }
-
+@layer utilities {
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  }
 body {
     margin: 0;
     padding: 0;
